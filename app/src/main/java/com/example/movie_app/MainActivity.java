@@ -23,20 +23,16 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        fragmentChanger(WatchlistFragment.class);
+
         initGui();
     }
 
     void initGui() {
         findViewById(R.id.btn_movies).setOnClickListener(v -> fragmentChanger(MovieFragment.class));
-        findViewById(R.id.btn_series).setOnClickListener(v -> {
-
-        });
-        findViewById(R.id.btn_watchlist).setOnClickListener(v -> {
-
-        });
-//        findViewById(R.id.btn_search).setOnClickListener(v -> {
-//
-//        });
+        findViewById(R.id.btn_series).setOnClickListener(v -> { });
+        findViewById(R.id.btn_watchlist).setOnClickListener(v -> fragmentChanger(WatchlistFragment.class));
+        findViewById(R.id.btn_search).setOnClickListener(v -> { });
     }
 
     private void fragmentChanger(Class c) {

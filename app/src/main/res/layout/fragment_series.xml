@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MenuFragment"
+    tools:context=".SeriesFragment"
     android:background="@color/grey">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,19 +12,18 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/tv_MainTitle"
+            android:id="@+id/tv_movieTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="32dp"
-            android:text="@string/privateer_movies"
+            android:text="@string/series"
             android:textSize="@dimen/text_title"
             android:fontFamily="serif"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </FrameLayout>

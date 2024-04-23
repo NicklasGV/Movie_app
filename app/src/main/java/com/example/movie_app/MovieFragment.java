@@ -1,12 +1,27 @@
 package com.example.movie_app;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
+
+import com.example.movie_app.Adapter.MovieAdapter;
+import com.example.movie_app.Model.MoviesModel;
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,6 +60,7 @@ public class MovieFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+    private GridView gridView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +75,38 @@ public class MovieFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_movie, container, false);
+        View view = inflater.inflate(R.layout.fragment_movie, container, false);
+
+        // Retrieve data from preferences
+        SharedPreferences preferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = preferences.getString("movies", "");
+        MoviesModel moviesModel = gson.fromJson(json, MoviesModel.class);
+        Log.v("json data", json);
+
+        ArrayList<MoviesModel.Result> results = new ArrayList<>();
+        if (moviesModel != null) {
+            results.addAll(moviesModel.getResults());
+        }
+
+        gridView = view.findViewById(R.id.gv_movielist);
+        updateGridViewColumns(getResources().getConfiguration().orientation);
+        gridView.setAdapter(new MovieAdapter(getContext(), results));
+
+        // Listen for changes in device orientation
+        gridView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            int orientation = getResources().getConfiguration().orientation;
+            updateGridViewColumns(orientation);
+        });
+
+        return view;
+    }
+
+    private void updateGridViewColumns(int orientation) {
+        int columns = 2; // Default to 2 columns for portrait orientation
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            columns = 3; // Use 3 columns for landscape orientation
+        }
+        gridView.setNumColumns(columns);
     }
 }

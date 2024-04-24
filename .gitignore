@@ -13,4 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
-/Secrets.java
+/com.example.movie_app.Secrets

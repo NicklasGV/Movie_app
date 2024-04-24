@@ -9,7 +9,7 @@ public class MoviesModel implements Serializable{
     public int total_pages;
     public int total_results;
 
-    public class Result implements Serializable {
+    public static class Result implements Serializable {
         public boolean adult;
         public String backdrop_path;
         public ArrayList<Integer> genre_ids;

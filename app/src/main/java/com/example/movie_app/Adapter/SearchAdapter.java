@@ -1,55 +1,50 @@
 package com.example.movie_app.Adapter;
 
+import static java.security.AccessController.getContext;
+
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Movie;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.movie_app.DetailedMovieFragment;
 import com.example.movie_app.Model.MoviesModel;
 import com.example.movie_app.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class MovieAdapter extends ArrayAdapter<MoviesModel.Result> {
+public class SearchAdapter extends ArrayAdapter<MoviesModel.Result> {
 
-    private Context mContext;
-    private ArrayList<MoviesModel.Result> mResults;
+    private Context context;
 
-    public MovieAdapter(Context context, ArrayList<MoviesModel.Result> results) {
-        super(context, 0, results);
-        mContext = context;
-        mResults = results;
+    public SearchAdapter(Context context, List<MoviesModel.Result> movies) {
+        super(context, 0, movies);
+        this.context = context;
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItemView = convertView;
-        ViewHolder viewHolder;
+        MovieAdapter.ViewHolder viewHolder;
 
         if (listItemView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            viewHolder = new ViewHolder();
+            viewHolder = new MovieAdapter.ViewHolder();
 
             // Inflate the appropriate layout based on the device orientation
-            if (mContext.getResources().getConfiguration().orientation ==
+            if (this.context.getResources().getConfiguration().orientation ==
                     Configuration.ORIENTATION_LANDSCAPE) {
                 listItemView = inflater.inflate(R.layout.grid_item_landscape, parent, false);
             } else {
@@ -60,11 +55,11 @@ public class MovieAdapter extends ArrayAdapter<MoviesModel.Result> {
 
             listItemView.setTag(viewHolder);
         } else {
-            viewHolder = (ViewHolder) listItemView.getTag();
+            viewHolder = (MovieAdapter.ViewHolder) listItemView.getTag();
         }
 
         // Bind data to your grid item layout here
-        MoviesModel.Result result = mResults.get(position);
+        MoviesModel.Result result = getItem(position);
 
         // Load backdrop image using Picasso
         if (result.getBackdrop_path() != null) {
@@ -79,7 +74,7 @@ public class MovieAdapter extends ArrayAdapter<MoviesModel.Result> {
                 DetailedMovieFragment fragment = DetailedMovieFragment.newInstance(result);
 
                 // Get the fragment manager and start the transaction
-                FragmentManager fragmentManager = ((AppCompatActivity) mContext).getSupportFragmentManager();
+                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, fragment)
                         .addToBackStack("name")
@@ -88,10 +83,5 @@ public class MovieAdapter extends ArrayAdapter<MoviesModel.Result> {
         });
 
         return listItemView;
-    }
-
-    static class ViewHolder {
-        ImageView imageView;
-        ImageButton btn_thumb;
     }
 }

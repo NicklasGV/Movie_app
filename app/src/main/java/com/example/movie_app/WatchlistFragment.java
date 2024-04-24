@@ -1,5 +1,8 @@
 package com.example.movie_app;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +10,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
+
+import com.example.movie_app.Adapter.MovieAdapter;
+import com.example.movie_app.Model.MoviesModel;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,34 +24,14 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class WatchlistFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private GridView gridView;
 
     public WatchlistFragment() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment WatchlistFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static WatchlistFragment newInstance(String param1, String param2) {
+    public static WatchlistFragment newInstance() {
         WatchlistFragment fragment = new WatchlistFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,16 +39,37 @@ public class WatchlistFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_watchlist, container, false);
+        View view = inflater.inflate(R.layout.fragment_movie, container, false);
+
+        // Retrieve data from preferences
+        SharedPreferences preferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = preferences.getString("saved_movies", "");
+        MoviesModel moviesModel = gson.fromJson(json, MoviesModel.class);
+
+        ArrayList<MoviesModel.Result> results = new ArrayList<>();
+        if (moviesModel != null && moviesModel.getResults() != null) {
+            results.addAll(moviesModel.getResults());
+        }
+
+        gridView = view.findViewById(R.id.gv_movielist);
+        updateGridViewColumns(getResources().getConfiguration().orientation);
+        gridView.setAdapter(new MovieAdapter(getContext(), results));
+
+        return view;
+    }
+
+    private void updateGridViewColumns(int orientation) {
+        int columns = 2; // Default to 2 columns for portrait orientation
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            columns = 3; // Use 3 columns for landscape orientation
+        }
+        gridView.setNumColumns(columns);
     }
 }

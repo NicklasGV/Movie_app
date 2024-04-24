@@ -53,40 +53,6 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_search).setOnClickListener(v -> fragmentChanger(SearchFragment.class));
     }
 
-//    void getMovies() {
-//        String url = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc";
-//        StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
-//            String json = response;
-//            // Convert JSON to a single MoviesModel object
-//            convertToMoviesModel(json);
-//            // Save the entire JSON response in SharedPreferences
-//            saveMovies(json);
-//
-//        }, volleyError -> {
-//            Log.wtf("WTFFF", volleyError.toString());
-//        })
-//        {
-//            @Override
-//            public Map<String, String> getHeaders(){
-//                Map<String, String>  params = new HashMap<>();
-//                params.put("Authorization", Secrets.Token);
-//                return params;
-//            }
-//        };
-//        rq.add(request);
-//    }
-//
-//    void saveMovies(String data){
-//        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPref.edit();
-//        editor.putString("movies", data);
-//        editor.apply();
-//    }
-//
-//    void convertToMoviesModel(String json){
-//        MoviesModel moviesModel = new Gson().fromJson(json, MoviesModel.class);
-//    }
-
     private void fragmentChanger(Class c) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.ImageButton;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
@@ -25,7 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MovieFragment extends Fragment {
-
+    private GridView gridView;
+    private ImageButton imagebtn;
     public MovieFragment() {
         // Required empty public constructor
     }
@@ -35,7 +37,6 @@ public class MovieFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-    private GridView gridView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

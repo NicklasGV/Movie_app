@@ -7,22 +7,19 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
-
-import com.example.movie_app.Adapter.MovieAdapter;
+import com.example.movie_app.Adapter.WatchlistAdapter;
+import com.example.movie_app.Database.MovieDBHelper;
 import com.example.movie_app.Model.MoviesModel;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link WatchlistFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class WatchlistFragment extends Fragment {
     private GridView gridView;
 
@@ -45,7 +42,7 @@ public class WatchlistFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_movie, container, false);
+        View view = inflater.inflate(R.layout.fragment_watchlist, container, false);
 
         // Retrieve data from preferences
         SharedPreferences preferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
@@ -58,18 +55,45 @@ public class WatchlistFragment extends Fragment {
             results.addAll(moviesModel.getResults());
         }
 
-        gridView = view.findViewById(R.id.gv_movielist);
-        updateGridViewColumns(getResources().getConfiguration().orientation);
-        gridView.setAdapter(new MovieAdapter(getContext(), results));
+        gridView = view.findViewById(R.id.gv_watchlist);
+        updateGridViewColumns();
+
+        gridView.setAdapter(new WatchlistAdapter(getContext(), results));
 
         return view;
     }
 
-    private void updateGridViewColumns(int orientation) {
-        int columns = 2; // Default to 2 columns for portrait orientation
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            columns = 3; // Use 3 columns for landscape orientation
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Call updateGridViewColumns when configuration changes (e.g., device orientation)
+        setRetainInstance(true);
+        updateGridViewColumns();
+    }
+
+    private void updateGridViewColumns() {
+        int columns;
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int screenWidthPx = displayMetrics.widthPixels;
+        int screenHeightPx = displayMetrics.heightPixels;
+        float screenDensity = displayMetrics.density;
+
+        // Define thresholds for different screen sizes
+        int phoneScreenWidthThreshold = 1000; // in pixels
+        int tabletScreenWidthThreshold = 1400; // in pixelsw
+
+        // Calculate screen width in dp
+        int screenWidthDp = (int) (screenWidthPx / screenDensity);
+
+        // Determine number of columns based on screen size
+        if (screenWidthDp < phoneScreenWidthThreshold) {
+            columns = 2; // Small screens (phones)
+        } else if (screenWidthDp < tabletScreenWidthThreshold) {
+            columns = 3; // Medium screens (tablets)
+        } else {
+            columns = 4; // Large screens (PC screens)
         }
+
         gridView.setNumColumns(columns);
     }
 }

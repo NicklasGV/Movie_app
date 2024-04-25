@@ -5,50 +5,44 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import com.example.movie_app.DetailedMovieFragment;
+import com.example.movie_app.DetailedSeriesFragment;
 import com.example.movie_app.MainActivity;
-import com.example.movie_app.Model.MoviesModel;
+import com.example.movie_app.Model.SeriesModel;
 import com.example.movie_app.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class MovieAdapter extends ArrayAdapter<MoviesModel.Result> {
-
+public class SeriesAdapter extends ArrayAdapter<SeriesModel.Result> {
     private Context context;
-    private ArrayList<MoviesModel.Result> mResults;
+    private ArrayList<SeriesModel.Result> sResults;
 
-    public MovieAdapter(Context context, ArrayList<MoviesModel.Result> results) {
+    public SeriesAdapter(Context context, ArrayList<SeriesModel.Result> results) {
         super(context, 0, results);
         this.context = context;
-        mResults = results;
+        sResults = results;
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItemView = convertView;
-        ViewHolder viewHolder;
+        SeriesAdapter.ViewHolder viewHolder;
 
         if (listItemView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            viewHolder = new ViewHolder();
+            viewHolder = new SeriesAdapter.ViewHolder();
 
             // Inflate the appropriate layout based on the device orientation
             if (this.context.getResources().getConfiguration().orientation ==
@@ -67,7 +61,7 @@ public class MovieAdapter extends ArrayAdapter<MoviesModel.Result> {
         }
 
         // Bind data to your grid item layout here
-        MoviesModel.Result result = mResults.get(position);
+        SeriesModel.Result result = sResults.get(position);
 
         // Load backdrop image using Picasso
         if (result.getBackdrop_path() != null) {
@@ -76,8 +70,8 @@ public class MovieAdapter extends ArrayAdapter<MoviesModel.Result> {
         }
 
         viewHolder.imageView.setOnClickListener(v -> {
-            // Pass the selected movie directly to DetailedMovieFragment.newInstance()
-            DetailedMovieFragment fragment = DetailedMovieFragment.newInstance(result);
+            // Pass the selected series directly to DetailedSeriesFragment.newInstance()
+            DetailedSeriesFragment fragment = DetailedSeriesFragment.newInstance(result);
 
             // Get the fragment manager and start the transaction
             FragmentManager fragmentManager = ((AppCompatActivity) this.context).getSupportFragmentManager();
@@ -91,9 +85,9 @@ public class MovieAdapter extends ArrayAdapter<MoviesModel.Result> {
             String json = new Gson().toJson(result);
             SharedPreferences sharedPref = ((MainActivity) context).getPreferences(Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString("saved_movies", json);
+            editor.putString("saved_Series", json);
             editor.apply();
-            Toast.makeText(context, "Movie liked", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Series liked", Toast.LENGTH_SHORT).show();
         });
 
         return listItemView;

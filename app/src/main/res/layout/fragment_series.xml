@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SeriesFragment"
+    tools:context=".MovieFragment"
     android:background="@color/grey">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,7 +12,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/tv_movieTitle"
+            android:id="@+id/tv_seriesTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -24,6 +24,20 @@
             android:fontFamily="serif"
             />
 
+        <GridView
+            android:id="@+id/gv_serieslist"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:horizontalSpacing="6dp"
+            android:numColumns="2"
+            app:layout_constraintTop_toBottomOf="@id/tv_seriesTitle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </FrameLayout>
